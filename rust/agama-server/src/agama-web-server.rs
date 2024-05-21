@@ -76,13 +76,13 @@ struct ServeArgs {
     address2: Option<String>,
     #[arg(
         long,
-        default_value = None,
+        default_value = "/run/agama/ssl/key.pem",
         help = "Path to the SSL private key file in PEM format"
     )]
     key: Option<String>,
     #[arg(
         long,
-        default_value = None,
+        default_value = "/run/agama/ssl/cert.pem",
         help = "Path to the SSL certificate file in PEM format"
     )]
     cert: Option<String>,
