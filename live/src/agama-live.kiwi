@@ -10,7 +10,7 @@
     </description>
     <profiles>
         <profile name="openSUSE" description="openSUSE multiproduct image" import="true" />
-        <profile name="openSUSE-Playwright" description="openSUSE image with Playwright integration tests" arch="aarch64,x86_64" />
+        <profile name="openSUSE-Puppeteer" description="openSUSE image with Puppeteer integration tests" />
     </profiles>
     <preferences>
         <version>8.0.0</version>
@@ -23,17 +23,17 @@
         <bootsplash-theme>bgrt</bootsplash-theme>
         <bootloader-theme>openSUSE</bootloader-theme>
     </preferences>
-    <preferences arch="ppc64le" profiles="openSUSE">
+    <preferences arch="ppc64le" profiles="openSUSE,openSUSE-Puppeteer">
         <type image="iso" flags="dmsquash"  firmware="ofw" mediacheck="true" volid="agama" editbootconfig="fix_bootconfig">
             <bootloader name="grub2" console="serial" timeout="10"/>
         </type>
     </preferences>
-    <preferences arch="aarch64,x86_64" profiles="openSUSE,openSUSE-Playwright">
+    <preferences arch="aarch64,x86_64" profiles="openSUSE,openSUSE-Puppeteer">
         <type image="iso" flags="dmsquash" firmware="uefi" mediacheck="true" volid="agama" editbootconfig="fix_bootconfig">
             <bootloader name="grub2" timeout="10"/>
         </type>
     </preferences>
-    <preferences arch="s390x" profiles="openSUSE">
+    <preferences arch="s390x" profiles="openSUSE,openSUSE-Puppeteer">
         <type image="iso" flags="dmsquash" volid="agama" editbootconfig="fix_bootconfig">
             <bootloader name="custom" />
         </type>
@@ -111,18 +111,15 @@
         <archive name="root.tar.xz"/>
     </packages>
     <!-- additional packages for the openSUSE flavors -->
-    <packages type="image" profiles="openSUSE,openSUSE-Playwright">
+    <packages type="image" profiles="openSUSE,openSUSE-Puppeteer">
       <package name="agama-products-opensuse"/>
       <package name="openSUSE-build-key"/>
     </packages>
     <!-- additional packages for the Playwright flavors -->
-    <packages type="image" profiles="openSUSE-Playwright">
-        <package name="playwright"/>
-        <package name="agama-playwright"/>
-        <!-- Playwright does not work with the openSUSE Firefox, -->
-        <!-- install the chromium browser for running the tests -->
-        <!-- unfortunately it is not available for s390x -->
-        <package name="chromium"/>
+    <packages type="image" profiles="openSUSE-Puppeteer">
+        <package name="agama-puppeteer"/>
+        <package name="MozillaFirefox"/>
+        <package name="MozillaFirefox-branding-openSUSE"/>
     </packages>
     <packages type="bootstrap">
         <package name="udev"/>

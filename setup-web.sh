@@ -3,7 +3,7 @@
 # Exit on error; unset variables are an error.
 set -eu
 
-MYDIR=$(realpath $(dirname $0))
+MYDIR=$(realpath "$(dirname "$0")")
 
 # Helper:
 # Ensure root privileges for the installation.
