@@ -5,8 +5,6 @@ name: Update OBS Packages
 on:
   workflow_call:
     secrets:
-      OBS_USER:
-        required: true
       OBS_PASSWORD:
         required: true
 
@@ -69,7 +67,7 @@ jobs:
       - name: Configure osc
         run: .github/workflows/configure_osc.sh
         env:
-          OBS_USER:     ${{ secrets.OBS_USER }}
+          OBS_USER:     ${{ vars.OBS_USER }}
           OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
 
       - name: Checkout ${{ steps.obs_project.outputs.OBS_PROJECT }} ${{ inputs.package_name }}
