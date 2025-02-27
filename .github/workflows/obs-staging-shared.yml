@@ -27,10 +27,10 @@ on:
         type: string
 
 jobs:
-  update_staging_package:
-    # do not run in forks which do not set the OBS_PROJECT variable,
-    # for the "release" branch or a git tag use the OBS_PROJECT_RELEASE variable
-    if: vars.OBS_PROJECT != '' || ((github.ref_name == 'release' || github.ref_type == 'tag') && vars.OBS_PROJECT_RELEASE != '')
+  update_obs_package:
+    # do not run in forks which do not set the OBS_PROJECTS variable,
+    # or the mapping for the current branch is missing
+    if: vars.OBS_PROJECTS != '' && fromJson(vars.OBS_PROJECTS)[github.ref_name]
 
     runs-on: ubuntu-latest
 
@@ -41,13 +41,9 @@ jobs:
       - name: Select OBS project
         id: obs_project
         run: |-
-          if [ "${{ github.ref_name }}" = "release" -o "${{ github.ref_type }}" = "tag" ]; then
-            echo "OBS_PROJECT=${{ vars.OBS_PROJECT_RELEASE }}" >> "$GITHUB_OUTPUT"
-            echo "OBS project: ${{ vars.OBS_PROJECT_RELEASE }}"
-          else
-            echo "OBS_PROJECT=${{ vars.OBS_PROJECT }}" >> "$GITHUB_OUTPUT"
-            echo "OBS project: ${{ vars.OBS_PROJECT }}"
-          fi
+          echo "${{ vars.OBS_PROJECTS }}"
+          echo "OBS_PROJECT=${{ fromJson(vars.OBS_PROJECTS)[github.ref_name] }}" >> "$GITHUB_OUTPUT"
+          echo "OBS project: ${{ fromJson(vars.OBS_PROJECTS)[github.ref_name] }}"
 
       - name: Configure and refresh repositories
         # disable unused repositories to have a faster refresh
@@ -84,7 +80,7 @@ jobs:
 
       - name: Update service revision
         # only when a tag has been pushed, or "release" branch updated
-        if: (github.ref_type == 'tag' || github.ref_name == 'release') && inputs.service_file != ''
+        if: inputs.service_file != ''
         run: |-
           echo "Updating revision to \"${{ github.ref_name }}\""
           sed -i -e 's#<param name="revision">.*</param>#<param name="revision">${{ github.ref_name }}</param>#' ${{ inputs.service_file }}
