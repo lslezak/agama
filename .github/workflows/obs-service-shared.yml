@@ -80,12 +80,3 @@ jobs:
           # and does not provide much value
           SKIP_OSC_BUILD: 1
           OBS_PROJECT: ${{ steps.obs_project.outputs.OBS_PROJECT }}
-
-      - name: Submit the rubygem-agama-yast package
-        # only when a tag has been pushed
-        if: ${{ github.ref_type == 'tag' }}
-        # the package has been committed in the previous step, just submit it
-        run: rake osc:sr:force
-        working-directory: ./service
-        env:
-          OBS_PROJECT: ${{ steps.obs_project.outputs.OBS_PROJECT }}
