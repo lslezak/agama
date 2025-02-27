@@ -5,16 +5,14 @@ name: Update OBS Service Package
 on:
   workflow_call:
     secrets:
-      OBS_USER:
-        required: true
       OBS_PASSWORD:
         required: true
 
 jobs:
   update_service:
-    # do not run in forks which do not set the OBS_PROJECTS variable,
+    # do not run in forks which do not set the OBS_PROJECTS and OBS_USER variables,
     # or the mapping for the current branch is missing
-    if: vars.OBS_PROJECTS != '' && fromJson(vars.OBS_PROJECTS)[github.ref_name]
+    if: vars.OBS_PROJECTS != '' && fromJson(vars.OBS_PROJECTS)[github.ref_name] && vars.OBS_USER != ''
 
     runs-on: ubuntu-latest
 

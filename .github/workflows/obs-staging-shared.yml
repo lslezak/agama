@@ -26,9 +26,9 @@ on:
 
 jobs:
   update_obs_package:
-    # do not run in forks which do not set the OBS_PROJECTS variable,
+    # do not run in forks which do not set the OBS_PROJECTS and OBS_USER variables,
     # or the mapping for the current branch is missing
-    if: vars.OBS_PROJECTS != '' && fromJson(vars.OBS_PROJECTS)[github.ref_name]
+    if: vars.OBS_PROJECTS != '' && fromJson(vars.OBS_PROJECTS)[github.ref_name] && vars.OBS_USER != ''
 
     runs-on: ubuntu-latest
 
