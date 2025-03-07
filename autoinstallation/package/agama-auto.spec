@@ -15,6 +15,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+# test in "master" branch
+
 Name:           agama-auto
 #               This will be set by osc services, that will run after this.
 Version:        0
