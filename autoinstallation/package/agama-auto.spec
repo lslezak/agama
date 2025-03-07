@@ -59,3 +59,4 @@ install -D -m 0644 %{_builddir}/agama/systemd/agama-auto.service %{buildroot}%{_
 %{_unitdir}/agama-auto.service
 
 %changelog
+# test in "beta2" branch
