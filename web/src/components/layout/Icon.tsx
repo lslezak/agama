@@ -52,6 +52,7 @@ import Visibility from "@icons/visibility.svg?component";
 import VisibilityOff from "@icons/visibility_off.svg?component";
 import Wifi from "@icons/wifi.svg?component";
 import WifiOff from "@icons/wifi_off.svg?component";
+import Emergency from "@icons/emergency.svg?component";
 
 const icons = {
   apps: Apps,
@@ -82,6 +83,7 @@ const icons = {
   warning: Warning,
   wifi: Wifi,
   wifi_off: WifiOff,
+  emergency: Emergency,
 };
 
 export type IconProps = React.SVGAttributes<SVGElement> & {

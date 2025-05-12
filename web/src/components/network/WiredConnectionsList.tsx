@@ -23,6 +23,7 @@
 import React, { useId } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 import {
+  Button,
   Content,
   DataList,
   DataListCell,
@@ -38,7 +39,9 @@ import { Connection } from "~/types/network";
 import { useConnections, useNetworkDevices } from "~/queries/network";
 import { NETWORK as PATHS } from "~/routes/paths";
 import { formatIp } from "~/utils/network";
+import { sprintf } from "sprintf-js";
 import { _ } from "~/i18n";
+import Annotation from "../core/Annotation";
 
 type ConnectionListItemProps = { connection: Connection };
 
@@ -66,6 +69,7 @@ const ConnectionListItem = ({ connection }: ConnectionListItemProps) => {
                   <Content className={a11yStyles.screenReader}>{_("IP addresses")}</Content>
                   {addresses.map(formatIp).join(", ")}
                 </Content>
+                <Annotation>{_("Configured for installation only")}</Annotation>
               </Flex>
             </DataListCell>,
           ]}
@@ -84,7 +88,24 @@ function WiredConnectionsList(props: DataListProps) {
   const wiredConnections = connections.filter((c) => !c.wireless);
 
   if (wiredConnections.length === 0) {
-    return <EmptyState title={_("No wired connections were found")} icon="error" />;
+    const [textStart, link, textEnd] = sprintf(
+      _(
+        "There are [%s available] connections for use, but they are not part of the current setup.",
+      ),
+      2,
+    ).split(/[[\]]/);
+
+    return (
+      <EmptyState title={_("No wired connections configured yet")} icon="error">
+        <Content component="p">
+          {textStart}{" "}
+          <Button isInline variant="link">
+            {link}
+          </Button>{" "}
+          {textEnd}
+        </Content>
+      </EmptyState>
+    );
   }
 
   return (

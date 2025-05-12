@@ -23,6 +23,7 @@
 import React from "react";
 import { generatePath } from "react-router-dom";
 import {
+  Content,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
@@ -32,6 +33,7 @@ import {
   Grid,
   GridItem,
   Stack,
+  Switch,
 } from "@patternfly/react-core";
 import { Link, Page } from "~/components/core";
 import { Connection, Device } from "~/types/network";
@@ -144,13 +146,34 @@ export default function WiredConnectionDetails({ connection }: { connection: Con
 
   return (
     <Grid hasGutter>
-      <GridItem md={6} order={{ default: "2", md: "1" }}>
+      <GridItem md={6} order={{ default: "2", md: "1" }} rowSpan={3}>
         <IpDetails device={device} connection={connection} />
       </GridItem>
       <GridItem md={6} order={{ default: "1", md: "2" }}>
         <Stack hasGutter>
           <DeviceDetails device={device} />
         </Stack>
+      </GridItem>
+      <GridItem md={6} order={{ default: "3" }}>
+        <Flex direction={{ default: "column" }} flexWrap={{ default: "nowrap" }}>
+          <FlexItem>
+            <Switch
+              aria-labelledby="switch-label"
+              aria-describedby="switch-description"
+              isChecked
+            />
+          </FlexItem>
+          <FlexItem>
+            <Content isEditorial id="switch-label">
+              {_("Use for installation only")}
+            </Content>
+            <Content component="small" id="switch-description">
+              {_(
+                "If active, the connection will be used only during installation and not persisted to the installed system",
+              )}
+            </Content>
+          </FlexItem>
+        </Flex>
       </GridItem>
     </Grid>
   );

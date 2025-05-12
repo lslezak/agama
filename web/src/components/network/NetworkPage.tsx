@@ -21,7 +21,7 @@
  */
 
 import React from "react";
-import { Content, Grid, GridItem } from "@patternfly/react-core";
+import { Alert, Content, Grid, GridItem } from "@patternfly/react-core";
 import { EmptyState, Page } from "~/components/core";
 import { _ } from "~/i18n";
 import { useNetworkChanges, useNetworkState } from "~/queries/network";
@@ -45,6 +45,7 @@ export default function NetworkPage() {
   useNetworkChanges();
   const networkState = useNetworkState();
 
+  console.log("Alert", Alert);
   return (
     <Page>
       <Page.Header>
@@ -52,6 +53,11 @@ export default function NetworkPage() {
       </Page.Header>
 
       <Page.Content>
+        <Alert variant="warning" title={_("No connections will be saved")}>
+          {_(
+            "All defined connections are for installation only and won’t be kept in the installed system.",
+          )}
+        </Alert>
         <Grid hasGutter>
           <GridItem sm={12} xl={6}>
             <Page.Section title={_("Wired connections")}>
