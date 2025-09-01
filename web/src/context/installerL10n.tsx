@@ -24,7 +24,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { locationReload, setLocationSearch } from "~/utils";
 import agama from "~/agama";
 import supportedLanguages from "~/languages.json";
-import { fetchConfig as defaultFetchConfig, updateConfig } from "~/api/l10n";
+import { fetchConfig as defaultFetchConfig } from "~/api/l10n";
 import { LocaleConfig } from "~/types/l10n";
 
 const L10nContext = React.createContext(null);

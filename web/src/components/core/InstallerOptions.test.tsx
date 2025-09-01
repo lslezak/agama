@@ -56,8 +56,7 @@ const mockL10nConfigMutation = {
   mutate: jest.fn(),
 };
 
-const mockChangeUIKeymap = jest.fn();
-const mockChangeUILanguage = jest.fn();
+const mockUpdateConfig = jest.fn();
 
 jest.mock("~/queries/l10n", () => ({
   ...jest.requireActual("~/queries/l10n"),
@@ -81,8 +80,7 @@ jest.mock("~/context/installerL10n", () => ({
   useInstallerL10n: () => ({
     keymap: "us",
     language: "de-DE",
-    changeKeymap: mockChangeUIKeymap.mockResolvedValue(true),
-    changeLanguage: mockChangeUILanguage.mockResolvedValue(true),
+    updateConfig: mockUpdateConfig.mockResolvedValue(true),
   }),
 }));
 
@@ -166,8 +164,7 @@ describe("InstallerOptions", () => {
       await user.selectOptions(keymapSelector, "English (UK)");
 
       await user.click(acceptButton);
-      expect(mockChangeUIKeymap).toHaveBeenCalledWith("gb");
-      expect(mockChangeUILanguage).toHaveBeenCalledWith("es-ES");
+      expect(mockUpdateConfig).toHaveBeenCalledWith({ uiLocale: "es-ES", uiKeymap: "gb" });
     });
 
     it("allows reusing settings for the selected product", async () => {
@@ -262,7 +259,7 @@ describe("InstallerOptions", () => {
         await user.selectOptions(languageSelector, "Español");
         const acceptButton = within(dialog).getByRole("button", { name: "Accept" });
         await user.click(acceptButton);
-        expect(mockChangeUIKeymap).not.toHaveBeenCalled();
+        expect(mockUpdateConfig).toHaveBeenCalledWith({ uiLocale: "es-ES" });
       });
     });
   });
@@ -290,7 +287,7 @@ describe("InstallerOptions", () => {
       await user.selectOptions(languageSelector, "Español");
 
       await user.click(acceptButton);
-      expect(mockChangeUILanguage).toHaveBeenCalledWith("es-ES");
+      expect(mockUpdateConfig).toHaveBeenCalledWith({ uiLocale: "es-ES" });
     });
 
     it("allows reusing settings for the selected product", async () => {
@@ -376,8 +373,7 @@ describe("InstallerOptions", () => {
       await user.selectOptions(keymapSelector, "English (UK)");
 
       await user.click(acceptButton);
-      expect(mockChangeUIKeymap).toHaveBeenCalledWith("gb");
-      expect(mockChangeUILanguage).not.toHaveBeenCalled();
+      expect(mockUpdateConfig).toHaveBeenCalledWith({ uiKeymap: "gb" });
     });
 
     it("allows reusing settings for the selected product", async () => {

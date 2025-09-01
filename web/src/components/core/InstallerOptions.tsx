@@ -58,6 +58,7 @@ import { _ } from "~/i18n";
 import supportedLanguages from "~/languages.json";
 import { PRODUCT, ROOT, L10N } from "~/routes/paths";
 import { useProduct } from "~/queries/software";
+import { updateConfig } from "~/api/l10n";
 
 /**
  * Props for select inputs
@@ -553,7 +554,7 @@ export default function InstallerOptions({
   const location = useLocation();
   const { locales } = useL10n();
   const { mutate: updateSystemL10n } = useConfigMutation();
-  const { language, keymap, changeLanguage, changeKeymap } = useInstallerL10n();
+  const { language, keymap } = useInstallerL10n();
   const { phase } = useInstallerStatus({ suspense: true });
   const { selectedProduct } = useProduct({ suspense: true });
   const initialFormState = {
@@ -605,14 +606,17 @@ export default function InstallerOptions({
     dispatchDialogAction({ type: "SET_BUSY" });
 
     try {
+      const changes: LocaleConfig = {};
       if (variant !== "language" && localConnection()) {
-        await changeKeymap(formState.keymap);
+        changes.uiKeymap = formState.keymap;
       }
 
       if (variant !== "keyboard") {
-        await changeLanguage(formState.language);
+        // FIXME: the changeLanguage did more things than just calling the API.
+        changes.uiLocale = formState.language;
       }
 
+      await updateConfig(changes);
       formState.allowReusingSettings && formState.reuseSettings && reuseSettings();
     } catch (e) {
       console.error(e);
