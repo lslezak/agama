@@ -6,11 +6,8 @@ permissions:
   pull-requests: write
 
 on:
-  schedule:
-    # run every Monday at 2:42AM UTC
-    - cron: "42 2 * * 0"
-
-  # allow running manually
+  # scheduled workflows are supported only for the default branch ("master"),
+  # this needs to be triggered manually for the SLE-16 branch :-/
   workflow_dispatch:
 
 jobs:
@@ -26,17 +23,17 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: registry.opensuse.org/opensuse/tumbleweed:latest
+      image: registry.opensuse.org/opensuse/leap:16.0
       volumes:
         # bind mount the GitHub CLI tool from the Ubuntu host,
-        # it is a statically linked binary so it should work also in TumbleWeed
+        # it is a statically linked binary so it should work also in Leap
         - /usr/bin/gh:/usr/bin/gh
 
     steps:
       - name: Configure and refresh repositories
         run: |
           # disable unused repositories to have a faster refresh
-          zypper modifyrepo -d repo-non-oss repo-openh264 repo-update && \
+          zypper modifyrepo -d openSUSE:repo-openh264 && zypper ref && \
             zypper --non-interactive ref
 
       - name: Install tools
@@ -51,12 +48,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: agama
+          # checkout the SLE-16 branch
+          ref: SLE-16
 
       - name: Checkout Agama-weblate sources
         uses: actions/checkout@v4
         with:
           path: agama-weblate
           repository: ${{ github.repository_owner }}/agama-weblate
+          # checkout the SLE-16 branch
+          ref: SLE-16
 
       - name: Install NPM packages
         working-directory: ./agama/web/share/po
@@ -107,18 +108,18 @@ jobs:
         working-directory: ./agama
         run: |
           # use an unique branch to avoid possible conflicts with already existing branches
-          git checkout -b "po_merge_${GITHUB_RUN_ID}"
+          git checkout -b "po_merge_sle16_${GITHUB_RUN_ID}"
           git commit -a -m "Update web translation files"$'\n\n'"Agama-weblate commit: `git -C ../agama-weblate rev-parse HEAD`"
-          git push origin "po_merge_${GITHUB_RUN_ID}"
+          git push origin "po_merge_sle16_${GITHUB_RUN_ID}"
 
       - name: Create pull request
         # run only when a PO file has been updated
         if: steps.check_changes.outputs.updated == 'true'
         working-directory: ./agama
         run: |
-          gh pr create -B master -H "po_merge_${GITHUB_RUN_ID}" \
+          gh pr create -B SLE-16 -H "po_merge_sle16_${GITHUB_RUN_ID}" \
             --label translations --label bot \
-            --title "Update web translation files" \
+            --title "Update web translation files (SLE-16)" \
             --body "Updating the web translation files from the agama-weblate repository"
         env:
           GH_TOKEN: ${{ github.token }}
