@@ -1,3 +1,5 @@
+TEST
+
 # Agama: A Service-based Linux Installer
 
 [![CI - Rust](https://github.com/openSUSE/agama/actions/workflows/ci-rust.yml/badge.svg)](https://github.com/openSUSE/agama/actions/workflows/ci-rust.yml)
