@@ -1,5 +1,17 @@
 # Agama: A Service-based Linux Installer
 
+```rpm-spec
+Name: sdfsdf
+
+%description
+%install
+```
+
+```mermaid
+flowchart LR
+  b1(Product appearance) --> b2(Brand appearance) --> b3(Agama default)
+```
+
 [![CI - Rust](https://github.com/openSUSE/agama/actions/workflows/ci-rust.yml/badge.svg)](https://github.com/openSUSE/agama/actions/workflows/ci-rust.yml)
 [![CI - Service](https://github.com/openSUSE/agama/actions/workflows/ci-service.yml/badge.svg)](https://github.com/openSUSE/agama/actions/workflows/ci-service.yml)
 [![CI - Web](https://github.com/openSUSE/agama/actions/workflows/ci-web.yml/badge.svg)](https://github.com/openSUSE/agama/actions/workflows/ci-web.yml)
